@@ -1,0 +1,15 @@
+<div ng-controller="PhoneListCtrl" class="collapse navbar-collapse navbar-ex1-collapse">
+<ul class="nav nav-tabs" role="tablist">
+    <li ng-repeat="phone in phones">
+      <a href="#{{phone.name}}" role="tab" data-toggle="tab">{{phone.name}}</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade" ng-repeat="content in contents" id="{{content.tab}}">
+      <h2>{{content.name}}</h2>
+      <p>{{content.snippet}}</p>
+    </div>
+</div>
+
+        </div>
+
