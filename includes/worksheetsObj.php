@@ -1,6 +1,6 @@
 <?php
 require_once("sdb.php");
-$result = pg_query($dbconn, "SELECT * FROM t_files ORDER BY name ASC");
+$result = pg_query($dbconn, "SELECT * FROM t_worksheets ORDER BY name ASC");
 if (!$result) {
   echo "An error occurred.\n";
   exit;

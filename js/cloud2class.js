@@ -1,8 +1,22 @@
 $(document).ready(function (){
 
 $( ".navbar-fixed-bottom .nav-tabs li a" ).on('click', function (){
-$( ".col-xs-12" ).css( "min-height", "62%" );
+$( "iframe" ).css( "min-height", "57%" );
 $( ".navbar-fixed-bottom" ).css( "height", "200px" );
+$( ".navbar-right img" ).css( "height", "200px" );
+$( ".navbar-fixed-bottom .nav-tabs li .close-tabs" ).fadeIn();
+$(".nav-tabs").css("border-bottom", "1px solid #ddd").fadeIn();
+$( ".navbar-fixed-bottom .nav-tabs li a" ).css("font-size", "17px");
+});
+
+$( ".navbar-fixed-bottom .nav-tabs li .close-tabs" ).on('click', function (){
+$(this).fadeOut();
+$( "iframe" ).css( "min-height", "81%" );
+$( ".navbar-fixed-bottom" ).css( "height", "54px" );
+$( ".navbar-right img" ).css( "height", "62px" );
+$(".nav-tabs").css("border-bottom", "0");
+$( ".navbar-fixed-bottom .nav-tabs li" ).removeClass("active");
+$( ".navbar-fixed-bottom .nav-tabs li a" ).css("font-size", "inherit");
 });
 
 $(".open-nav").click(function (){

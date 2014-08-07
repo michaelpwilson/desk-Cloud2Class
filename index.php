@@ -2,7 +2,8 @@
  $query="select u.max_containers, a.max_class, a.name, a.organisation from t_account a, t_user u where a.account_id=u.account_id and u.user_id={$_SESSION['user_id']}";
  $result=pg_query($dbconn,$query);
  $line = pg_fetch_assoc($result);
- print $line['name'];
+// $session_type=$_GET["type"];
+ $console_ref=$_GET["nodekey"];
  // # Validate session
  // require_once("includes/session.php");
  // $user_id=validate_session();
@@ -11,20 +12,20 @@
  // $dock_id=validate_session_action("{$stoken}");
  // print "after";
 
-# Validate the action via an stoken
-
-# Are we console or desktop: database query
-
-$session_type="console";
-$console_ref="dummy";
 # construct iframe
+$session_type = "console";
+$root = "https://dev.cloud2class.com/";
 if ($session_type == "console")
 {
-  $iframe_url="https://dev.cloud2class.com/shell/?{$console_ref}";
+  $iframe_url=$root . "viewcons/?{$console_ref}";
 }
 elseif ($session_type == "desktop")
 {
-  $iframe_url="https://dev.cloud2class.com:6080/vnc_auto.html?token={$stoken}";
+  $iframe_url=$root . ":6080/vnc_auto.html?token={$console_ref}";
+}
+elseif ($session_type == "resource")
+{
+   $iframe_url=$root . "viewres/?{$console_ref}";
 }
 ?>
 <!DOCTYPE html>
@@ -42,7 +43,7 @@ elseif ($session_type == "desktop")
 </head>
 
 <body class="row">
-    <nav class="navbar navbar-fixed-bottom navbar-inverse" style="height:54px" role="navigation" ng-app="myApp">
+    <nav class="navbar navbar-fixed-bottom navbar-inverse" style="height:54px" role="navigation" ng-app="desk">
         <div>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -53,22 +54,51 @@ elseif ($session_type == "desktop")
                 </button>
             </div>
 
-<div ng-controller="PhoneListCtrl" class="collapse navbar-collapse navbar-ex1-collapse">
-<ul class="nav nav-tabs" role="tablist">
-    <li ng-repeat="phone in phones">
-      <a href="#{{phone.name}}" role="tab" data-toggle="tab">{{phone.name}}</a>
+<div ng-controller="MainCtrl" class="collapse navbar-collapse navbar-ex1-collapse">
+<div class="navbar-left col-sm-10">
+<ul class="nav nav-tabs" role="tablist" style="border-bottom:0">
+    <li ng-repeat="tab in tabs">
+      <a href="#{{tab.name}}" role="tab" data-toggle="tab">{{tab.name}}</a>
     </li>
+   <li><a href="" class="close-tabs btn btn-danger" style="display:none;"><b class="glyphicon glyphicon-remove"></b></a></li>
 </ul>
-<div class="tab-content">
-    <div class="tab-pane fade" ng-repeat="content in contents" id="{{content.tab}}">
-      <h2>{{content.name}}</h2>
-      <p>{{content.snippet}}</p>
-    </div>
+<div class="tab-content" style="margin-left:-25px">
+<div class="tab-pane fade in active" id="files" style="height:150px">
+<div class="col-sm-3">
+ <ul>
+  <li ng-repeat="item in files"><a href="#">{{item.name}}</a></li>
+ </ul>
+</div>
+</div>
+<div class="tab-pane fade in active" id="worksheets" style="height:150px">
+<div class="col-sm-3">
+ <ul>
+  <li ng-repeat="item in worksheets"><a href="#">{{item.name}}</a></li>
+ </ul>
+</div>
 </div>
 
+
+</div>
+</div>
+<div class="navbar-right col-sm-2" style="margin-top:-5px">
+<img src="images/c2c-logo.png" class="img-responsive" style="height: 62px; float:right">
+</div>
         </div>
     </nav>
-        <iframe src="<?php echo $iframe_url; ?>" class="col-xs-12" allowfullscreen></iframe>
+<div class="main_container col-xs-12">
+<div class="console-toolbar">
+<div class="btn-group toolbar-options">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    New Console <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu" role="menu">
+   <img style="width:100%;" src="images/console-buttons.jpg" />
+  </div>
+</div>
+</div>
+<iframe src="<?php echo $iframe_url; ?>" allowfullscreen></iframe>
+</div>
 <div class="navbar navbar-inverse navbar-fixed-bottom" id="files-text" style="display: none;"></div>
     <!-- JavaScript -->
     <script src="js/jquery-1.10.2.js"></script>
